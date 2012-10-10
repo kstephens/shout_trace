@@ -210,10 +210,11 @@ class Server
           # Apply filters.
           @filter.each do | filter |
             file_copy = file.clone
-            result = filter.call(file_copy, req)
-            # STDERR.puts "filter: #{file.inspect} => #{file_copy.inspect} #{result.inspect}"
-            result = result.gsub('//', '/')
-            file = File.expand_path(result) if result && File.exist?(result)
+            if result = filter.call(file_copy, req)
+              # STDERR.puts "filter: #{file.inspect} => #{file_copy.inspect} #{result.inspect}"
+              result = result.gsub('//', '/')
+              file = File.expand_path(result)
+            end
           end
         end
 
